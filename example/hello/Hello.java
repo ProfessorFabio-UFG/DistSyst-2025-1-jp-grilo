@@ -39,7 +39,13 @@ package example.hello;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
 public interface Hello extends Remote {
     String sayHello() throws RemoteException;
+    List<Integer> getVector() throws RemoteException;
+    Integer getElement(int index) throws RemoteException;
+    void addElement(int value) throws RemoteException;
+    void removeElement(int index) throws RemoteException;
+    void clearVector() throws RemoteException;
 }

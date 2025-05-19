@@ -41,22 +41,52 @@ import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Server implements Hello {
 
-    public Server() {}
+    private List<Integer> vector;
+
+    public Server() {
+        vector = new ArrayList<>();
+    }
 
     public String sayHello() {
         return "Hello, world!";
     }
 
-    public static void main(String args[]) {
+    public List<Integer> getVector() {
+        return new ArrayList<>(vector);
+    }
 
+    public Integer getElement(int index) throws RemoteException {
+        if (index < 0 || index >= vector.size()) {
+            throw new RemoteException("Index out of bounds");
+        }
+        return vector.get(index);
+    }
+
+    public void addElement(int value) {
+        vector.add(value);
+    }
+
+    public void removeElement(int index) throws RemoteException {
+        if (index < 0 || index >= vector.size()) {
+            throw new RemoteException("Index out of bounds");
+        }
+        vector.remove(index);
+    }
+
+    public void clearVector() {
+        vector.clear();
+    }
+
+    public static void main(String args[]) {
         try {
             Server obj = new Server();
             Hello stub = (Hello) UnicastRemoteObject.exportObject(obj, 0);
 
-            // Bind the remote object's stub in the registry
             Registry registry = LocateRegistry.getRegistry();
             registry.bind("Hello", stub);
 
